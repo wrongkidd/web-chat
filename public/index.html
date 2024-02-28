@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>Login Page</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+   <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+
+   <link rel="stylesheet" href="./styles.css" />
+   <!-- Firebase Package-->
+   <script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js">
+   </script>
+   <!-- Loads the login UI elements-->
+   <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js">
+   </script>
+   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+   <link href="./font.css" rel="stylesheet" />
+</head>
+
+<body>
+   <h1 class="logo-text" style="text-align: center;"> Personal<span class="logo-highlight"> Chat</span></h1>
+   <!-- <img src="./images/Gemini_Generated_Image-removebg-preview.png" alt="logo" class="logo-img" /> -->
+   <div id="firebaseui-auth-container">
+
+   </div>
+
+   <script>
+      var config = {
+         apiKey: "AIzaSyB12Rn3F_2WzljIJjPIh7PGjfW04vMEtH8",
+         authDomain: "webrtc-7c203.firebaseapp.com",
+         // databaseURL: "https://signinwith-7bafd.firebaseio.com",
+         projectId: "webrtc-7c203",
+         storageBucket: "webrtc-7c203.appspot.com",
+         messagingSenderId: "251852302268",
+         appId: "1:251852302268:web:61aae307917c74efee2db9",
+         measurementId: "G-LXJRN4MQ2B"
+      };
+      firebase.initializeApp(config);
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+
+      // FirebaseUI config.
+      var uiConfig = {
+         signInOptions: [
+            // google sign in option
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+         ],
+
+         // Terms of service url/callback.
+         tosUrl: '<your-tos-url>',
+         // Privacy policy url/callback.
+         privacyPolicyUrl: function () {
+            window.location.assign('<your-privacy-policy-url>');
+         },
+
+         callbacks: {
+            signInSuccess: function (user, credential, redirectUrl) {
+               // User successfully signed in.
+
+               user.getIdToken().then(function (idToken) {
+                  console.log(idToken);
+                  // document.cookie = "__session=idToken"
+                  window.location.href = '/savecookie?idToken=' + idToken;
+               }).catch(error => {
+                  console.log(error);
+               });
+
+            }
+         }
+      };
+      // Initialize the FirebaseUI Widget using Firebase.
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+      // The start method will wait until the DOM is loaded.
+      ui.start('#firebaseui-auth-container', uiConfig);
+   </script>
+
+</body>
+
+</html>
