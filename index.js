@@ -3,7 +3,8 @@ const admin = require("firebase-admin");
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const https = require('https');
+// const https = require('https');
+const http = require('http');
 const fs = require('fs');
 require('dotenv').config();
 
@@ -23,13 +24,9 @@ admin.initializeApp({
     })
 })
 
-const options = {
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.crt')
-};
-const httpsServer = https.createServer(options, app);
+const httpServer = http.createServer(app);
 
-const io = require('socket.io')(httpsServer);
+const io = require('socket.io')(httpServer);
 const path = require('path');
 
 const port = 3000;
@@ -163,10 +160,6 @@ io.on("connection", socket => {
     });
 });
 
-httpsServer.listen(port, () => {
+httpServer.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
-
-// https.createServer(options, app).listen(port, () => {
-//     console.log(`Server listening on port ${port}`);
-// });
